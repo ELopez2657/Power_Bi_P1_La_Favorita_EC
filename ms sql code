@@ -1,0 +1,61 @@
+use la_favorita;
+select * from stores;
+select * from transactions;
+select * from items;
+select * from train;
+
+--------------------------------------------------------
+--transaction by store
+select 
+	store_nbr ,
+	count(transaction_n) transaction_x_store 
+from 
+	transactions
+group by store_nbr
+order by count(transaction_n)
+
+--------------------------------------------------------
+--transaction by city
+select s.city ,
+	count(transaction_n) transaction_x_city  
+from 
+	transactions trans
+	left join 
+	stores s on trans.store_nbr = s.store_nbr
+group by 
+	s.city
+order by 
+	count(transaction_n) desc
+
+--------------------------------------------------------
+--transaction by state
+select s.state ,
+	count(transaction_n) transaction_x_state
+from 
+	transactions trans
+	left join 
+	stores s on trans.store_nbr = s.store_nbr
+group by 
+	s.state
+order by 
+	count(transaction_n) desc
+
+--------------------------------------------------------
+--Union tables train, store and items 
+select 
+	t.id,
+	t.date,
+	t.store_nbr,
+	s.city,
+	s.state,
+	s.type_n,
+	s.cluster,
+	t.item_nbr,
+	t.unit_sales,
+	i.family,
+	i.class,
+	i.perishable
+from 
+	train t
+	left join stores s on t.store_nbr = s.store_nbr
+	left join items i on t.item_nbr = i.item_nbr
